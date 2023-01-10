@@ -1,32 +1,19 @@
-import React, { useRef } from "react";
-import Blog from "./Blog";
-import CreateNewBlog from "./CreateNewBlog";
-import Togglable from "./Togglable";
-import blogService from "../services/blogs";
+import React, { useRef } from 'react'
+import { useSelector } from 'react-redux'
+import Blog from './Blog'
+import CreateNewBlog from './CreateNewBlog'
+import Togglable from './Togglable'
+import blogService from '../services/blogs'
 
-const LoggedUser = ({
-  user,
-  setUser,
-  blogs,
-  setBlogs,
-  setMessage,
-  setMessageColor,
-}) => {
+const LoggedUser = ({ user, setUser }) => {
+  const blogs = useSelector((state) => state.blogs)
   const handleLogout = () => {
-    window.localStorage.removeItem("loggedBlogappUser");
-    blogService.setToken(null);
-    setUser(null);
-  };
+    window.localStorage.removeItem('loggedBlogappUser')
+    blogService.setToken(null)
+    setUser(null)
+  }
 
-  const handleRemoveButton = (blog) => async () => {
-    const alert = window.confirm(`Remove blog ${blog.title} by ${blog.author}`);
-    if (alert) {
-      await blogService.clean(blog.id);
-      setBlogs(blogs.filter((thisBlog) => thisBlog !== blog));
-    }
-  };
-
-  const blogFormRef = useRef();
+  const blogFormRef = useRef()
 
   return (
     <div>
@@ -37,30 +24,18 @@ const LoggedUser = ({
       </div>
       <br />
       <Togglable buttonLabel="create new blog" ref={blogFormRef}>
-        <CreateNewBlog
-          blogs={blogs}
-          setBlogs={setBlogs}
-          setMessage={setMessage}
-          setMessageColor={setMessageColor}
-          blogFormRef={blogFormRef}
-        />
+        <CreateNewBlog blogFormRef={blogFormRef} />
       </Togglable>
       <div>
         {blogs
           .slice()
           .sort((blog1, blog2) => blog2.likes - blog1.likes)
           .map((blog) => (
-            <Blog
-              className="blog"
-              key={blog.id}
-              blog={blog}
-              user={user}
-              handleRemoveButton={handleRemoveButton}
-            />
+            <Blog className="blog" key={blog.id} blog={blog} user={user} />
           ))}
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default LoggedUser;
+export default LoggedUser

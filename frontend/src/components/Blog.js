@@ -1,52 +1,45 @@
-import React, { useState } from "react";
-import blogService from "../services/blogs";
+import React, { useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { deleteBlog, likeBlog } from '../reducers/blogsReducer'
 
-const Blog = ({ blog, user, handleRemoveButton, handleLikeButtonTest }) => {
-  const [visible, setVisible] = useState(false);
-  const [totalLikes, setTotalLikes] = useState(blog.likes);
+const Blog = ({ blog, user }) => {
+  const [visible, setVisible] = useState(false)
+  const dispatch = useDispatch()
 
   const toggleVisibility = () => {
-    setVisible(!visible);
-  };
-
-  const isBlogThisUsers = () => {
-    if (blog.user.username === user.username) {
-      return true;
-    }
-    return false;
-  };
+    setVisible(!visible)
+  }
 
   const blogStyle = {
     paddingTop: 10,
     paddingLeft: 2,
-    border: "solid",
+    border: 'solid',
     borderWidth: 1,
     marginBottom: 5,
-  };
+  }
 
   const removeButtonStyle = {
-    backgroundColor: "#00FFFF",
-    display: isBlogThisUsers() ? "" : "none",
-  };
+    backgroundColor: '#00FFFF',
+    display: blog.user.username === user.username ? '' : 'none',
+  }
 
-  //handleLikeButtonTest is used to test this component
-  const handleLikeButton = handleLikeButtonTest
-    ? handleLikeButtonTest
-    : async () => {
-        const newBlog = {
-          ...blog,
-          likes: totalLikes + 1,
-        };
-        await blogService.like(blog.id, newBlog);
-        setTotalLikes(totalLikes + 1);
-      };
+  const handleLikeButton = () => {
+    dispatch(likeBlog(blog.id))
+  }
+
+  const handleRemoveButton = () => {
+    const alert = window.confirm(`Remove blog ${blog.title} by ${blog.author}`)
+    if (alert) {
+      dispatch(deleteBlog(blog.id))
+    }
+  }
 
   const hiddenBlog = () => (
     <div className="hiddenBlog">
       {`${blog.title} ${blog.author}`}
       <button onClick={toggleVisibility}>view</button>
     </div>
-  );
+  )
 
   const shownBlog = () => (
     <div className="shownBlog">
@@ -56,19 +49,19 @@ const Blog = ({ blog, user, handleRemoveButton, handleLikeButtonTest }) => {
       </div>
       <div>{blog.url}</div>
       <div>
-        {`likes ${totalLikes} `}
+        {`likes ${blog.likes} `}
         <button onClick={handleLikeButton}>like</button>
       </div>
       <div>{blog.user.name}</div>
       <div>
-        <button style={removeButtonStyle} onClick={handleRemoveButton(blog)}>
+        <button style={removeButtonStyle} onClick={handleRemoveButton}>
           remove
         </button>
       </div>
     </div>
-  );
+  )
 
-  return <div style={blogStyle}>{visible ? shownBlog() : hiddenBlog()}</div>;
-};
+  return <div style={blogStyle}>{visible ? shownBlog() : hiddenBlog()}</div>
+}
 
-export default Blog;
+export default Blog

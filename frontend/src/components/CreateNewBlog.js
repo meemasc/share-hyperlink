@@ -1,55 +1,39 @@
-import React, { useState } from "react";
-import blogService from "../services/blogs";
+import React, { useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { setNotification } from '../reducers/notificationReducer'
+import { addNewBlog } from '../reducers/blogsReducer'
 
-const CreateNewBlog = ({
-  blogs,
-  setBlogs,
-  setMessage,
-  setMessageColor,
-  blogFormRef,
-  handleBlogCreationTest,
-}) => {
-  const [blogTitle, setBlogTitle] = useState("");
-  const [blogAuthor, setBlogAuthor] = useState("");
-  const [blogUrl, setBlogUrl] = useState("");
+const CreateNewBlog = ({ blogFormRef }) => {
+  const [blogTitle, setBlogTitle] = useState('')
+  const [blogAuthor, setBlogAuthor] = useState('')
+  const [blogUrl, setBlogUrl] = useState('')
+  const dispatch = useDispatch()
 
-  //handleForTesting is used for testing
-  //other than that it is useless
-  const handleForTesting = () => {
-    const blog = {
-      title: blogTitle,
-      author: blogAuthor,
-      url: blogUrl,
-    };
-    handleBlogCreationTest(blog);
-  };
-
-  const handleForCreation = async (event) => {
-    event.preventDefault();
+  const handleBlogCreation = async (event) => {
+    event.preventDefault()
 
     const blog = {
       title: blogTitle,
       author: blogAuthor,
       url: blogUrl,
-    };
+    }
 
-    blogFormRef.current.toggleVisibility();
-    const newBlog = await blogService.create(blog);
+    blogFormRef.current.toggleVisibility()
 
-    setBlogs(blogs.concat(newBlog));
-    setBlogTitle("");
-    setBlogAuthor("");
-    setBlogUrl("");
-    setMessageColor("green");
-    setMessage(`a new blog ${newBlog.title} by ${newBlog.author} added`);
-    setTimeout(() => {
-      setMessage(null);
-    }, 5000);
-  };
+    await dispatch(addNewBlog(blog))
 
-  const handleBlogCreation = handleBlogCreationTest
-    ? handleForTesting
-    : handleForCreation;
+    setBlogTitle('')
+    setBlogAuthor('')
+    setBlogUrl('')
+
+    dispatch(
+      setNotification(
+        `a new blog ${blog.title} by ${blog.author} added`,
+        'green',
+        5
+      )
+    )
+  }
 
   return (
     <div>
@@ -90,7 +74,7 @@ const CreateNewBlog = ({
         </button>
       </form>
     </div>
-  );
-};
+  )
+}
 
-export default CreateNewBlog;
+export default CreateNewBlog

@@ -1,33 +1,32 @@
-import React, { useState } from "react";
-import loginService from "../services/login";
-import blogService from "../services/blogs";
+import React, { useState } from 'react'
+import loginService from '../services/login'
+import blogService from '../services/blogs'
+import { useDispatch } from 'react-redux'
+import { setNotification } from '../reducers/notificationReducer'
 
-const LoginForm = ({ setUser, setMessage, setMessageColor }) => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+const LoginForm = ({ setUser }) => {
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
+  const dispatch = useDispatch()
 
   const handleLogin = async (event) => {
-    event.preventDefault();
+    event.preventDefault()
 
     try {
       const user = await loginService.login({
         username,
         password,
-      });
+      })
 
-      window.localStorage.setItem("loggedBlogappUser", JSON.stringify(user));
-      blogService.setToken(user.token);
-      setUser(user);
-      setUsername("");
-      setPassword("");
+      window.localStorage.setItem('loggedBlogappUser', JSON.stringify(user))
+      blogService.setToken(user.token)
+      setUser(user)
+      setUsername('')
+      setPassword('')
     } catch (exception) {
-      setMessageColor("red");
-      setMessage("wrong username or password");
-      setTimeout(() => {
-        setMessage(null);
-      }, 5000);
+      dispatch(setNotification('wrong username or password', 'red', 5))
     }
-  };
+  }
 
   return (
     <div>
@@ -54,7 +53,7 @@ const LoginForm = ({ setUser, setMessage, setMessageColor }) => {
         <button type="submit">login</button>
       </form>
     </div>
-  );
-};
+  )
+}
 
-export default LoginForm;
+export default LoginForm
