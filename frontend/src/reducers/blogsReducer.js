@@ -56,12 +56,12 @@ const blogsReducer = createSlice({
           const newLikes = blog.likes + 1
           return {
             ...blog,
-            likes: newLikes
+            likes: newLikes,
           }
         }
         return blog
       })
-    }
+    },
   },
 })
 

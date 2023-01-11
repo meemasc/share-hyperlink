@@ -4,11 +4,11 @@ import { useParams } from 'react-router-dom'
 
 const UserView = () => {
   const id = useParams().id
-  const allUsers = useSelector(state => state.allUsers)
-  if (!allUsers) {
+  const user = useSelector(state => state.allUsers.find(user => user.id === id))
+
+  if (!user) {
     return null
   }
-  const user = allUsers.find(user => user.id === id)
 
   return (
     <div>

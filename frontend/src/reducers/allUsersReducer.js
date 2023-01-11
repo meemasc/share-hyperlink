@@ -10,7 +10,7 @@ export const initializeAllUsers = () => {
 
 const allUsersReducer = createSlice({
   name: 'allUsers',
-  initialState: null,
+  initialState: [],
   reducers:{
     setUsers(state, action) {
       return action.payload
