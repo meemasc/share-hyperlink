@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 import blogService from '../services/blogs'
+import { setNotification } from '../reducers/notificationReducer'
 
 export const initializeBlogs = () => {
   return async (dispatch) => {
@@ -12,6 +13,13 @@ export const addNewBlog = (blog) => {
   return async (dispatch) => {
     const newBlog = await blogService.create(blog)
     dispatch(blogsReducer.actions.addAction(newBlog))
+    dispatch(
+      setNotification(
+        `a new blog ${newBlog.title} by ${newBlog.author} added`,
+        'green',
+        5
+      )
+    )
   }
 }
 
@@ -58,12 +66,3 @@ const blogsReducer = createSlice({
 })
 
 export default blogsReducer.reducer
-
-/* state.map((blog) => {
-        if (blog.id === action.payload) {
-          blog.likes += 1
-          return blog
-        }
-        return blog
-      })
-*/

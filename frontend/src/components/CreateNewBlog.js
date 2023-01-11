@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { setNotification } from '../reducers/notificationReducer'
 import { addNewBlog } from '../reducers/blogsReducer'
 
 const CreateNewBlog = ({ blogFormRef }) => {
@@ -20,19 +19,12 @@ const CreateNewBlog = ({ blogFormRef }) => {
 
     blogFormRef.current.toggleVisibility()
 
-    await dispatch(addNewBlog(blog))
+    dispatch(addNewBlog(blog))
 
     setBlogTitle('')
     setBlogAuthor('')
     setBlogUrl('')
 
-    dispatch(
-      setNotification(
-        `a new blog ${blog.title} by ${blog.author} added`,
-        'green',
-        5
-      )
-    )
   }
 
   return (

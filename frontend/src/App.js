@@ -1,37 +1,27 @@
-import React, { useState, useEffect } from 'react'
-import { useDispatch } from 'react-redux'
+import React from 'react'
+import {
+  Routes, Route
+} from 'react-router-dom'
+import { useSelector } from 'react-redux'
+import { useInitialize } from './utils/hooks'
 import LoginForm from './components/LoginForm'
 import Notification from './components/Notification'
 import LoggedUser from './components/LoggedUser'
-import { initializeBlogs } from './reducers/blogsReducer'
-import blogService from './services/blogs'
+import UsersView from './components/UsersView'
+import UserView from './components/UserView'
 
 const App = () => {
-  const [user, setUser] = useState(null)
-  const dispatch = useDispatch()
-
-  useEffect(() => {
-    dispatch(initializeBlogs())
-  }, [])
-
-  useEffect(() => {
-    const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
-    if (loggedUserJSON) {
-      const user = JSON.parse(loggedUserJSON)
-      setUser(user)
-      blogService.setToken(user.token)
-    }
-  }, [])
-
-  const loginForm = () => <LoginForm setUser={setUser} />
-
-  const loggedUser = () => <LoggedUser user={user} setUser={setUser} />
+  const user = useSelector(state => state.user)
+  useInitialize()
 
   return (
     <div>
       <Notification />
-      {user === null && loginForm()}
-      {user !== null && loggedUser()}
+      <Routes>
+        <Route path='/' element={user ? <LoggedUser /> : <LoginForm />} />
+        <Route path='/users/:id' element={<UserView />} />
+        <Route path='/users' element={<UsersView />} />
+      </Routes>
     </div>
   )
 }

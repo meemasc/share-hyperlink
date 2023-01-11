@@ -1,16 +1,17 @@
 import React, { useRef } from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import Blog from './Blog'
 import CreateNewBlog from './CreateNewBlog'
 import Togglable from './Togglable'
-import blogService from '../services/blogs'
+import { logoutUser } from '../reducers/userReducer'
 
-const LoggedUser = ({ user, setUser }) => {
+const LoggedUser = () => {
   const blogs = useSelector((state) => state.blogs)
+  const user = useSelector((state) => state.user)
+  const dispatch = useDispatch()
+
   const handleLogout = () => {
-    window.localStorage.removeItem('loggedBlogappUser')
-    blogService.setToken(null)
-    setUser(null)
+    dispatch(logoutUser())
   }
 
   const blogFormRef = useRef()
