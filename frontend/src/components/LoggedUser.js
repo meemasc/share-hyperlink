@@ -6,6 +6,7 @@ import Togglable from './Togglable'
 
 const LoggedUser = () => {
   const blogs = useSelector((state) => state.blogs)
+  const user = useSelector((state) => state.user)
 
   const blogFormRef = useRef()
 
@@ -13,9 +14,12 @@ const LoggedUser = () => {
     <div>
       <h2>blogs</h2>
       <br />
+      {user.name ?
       <Togglable buttonLabel="create new blog" ref={blogFormRef}>
         <CreateNewBlog blogFormRef={blogFormRef} />
-      </Togglable>
+      </Togglable> :
+      <div></div>
+      }
       <div>
         {blogs
           .slice()

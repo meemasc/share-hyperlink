@@ -37,6 +37,13 @@ export const likeBlog = (blogID) => {
   }
 }
 
+export const commentBlog = (comment, blogID) => {
+  return async (dispatch) => {
+    await blogService.comment(blogID, comment)
+    dispatch(blogsReducer.actions.commentAction({ blogID, comment }))
+  }
+}
+
 const blogsReducer = createSlice({
   name: 'blogs',
   initialState: [],
@@ -62,6 +69,18 @@ const blogsReducer = createSlice({
         return blog
       })
     },
+    commentAction(state, action) {
+      return state.map((blog) => {
+        if (blog.id === action.payload.blogID) {
+          const newBlog ={
+            ...blog,
+            comments: blog.comments.concat(action.payload.comment)
+          }
+          return newBlog
+        }
+        return blog
+      })
+    }
   },
 })
 

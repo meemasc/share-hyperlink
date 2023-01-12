@@ -35,5 +35,12 @@ const clean = async (id) => {
   await axios.delete(`${baseUrl}/${id}`, config)
 }
 
-const object = { getAll, create, setToken, like, clean }
+const comment = async (id, comment) => {
+  const config = {
+    headers: { Authorization: token },
+  }
+  await axios.post(`${baseUrl}/${id}/comment`, { comment }, config)
+}
+
+const object = { getAll, create, setToken, like, clean, comment }
 export default object

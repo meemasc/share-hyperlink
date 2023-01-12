@@ -2,6 +2,7 @@ import React from 'react'
 import { useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
 import { useEventHandler } from '../utils/hooks'
+import Comments from './Comments'
 
 const BlogView = () => {
   const id = useParams().id
@@ -29,6 +30,7 @@ const BlogView = () => {
       <button style={removeButtonStyle} onClick={eventHandler.removeHandler(blog)}>
         remove
       </button>
+      <Comments comments={blog.comments}/>
     </div>
   )
 }

@@ -47,6 +47,22 @@ blogsRouter.post("/", async (request, response) => {
   response.json(responseBlog);
 });
 
+blogsRouter.post("/:id/comment", async (request, response) => {
+  const tokenUser = request.user;
+  if (tokenUser === null) {
+    return response.status(401).json({ error: "token missing or invalid" });
+  }
+
+  const blog = await Blog.findById(request.params.id);
+  blog.comments = blog.comments.concat(request.body.comment)
+
+  const responseBlog = await Blog.findByIdAndUpdate(blog.id, blog, {new: true}).populate("user", {
+    username: 1,
+    name: 1
+  });
+  response.json(responseBlog);
+});
+
 blogsRouter.delete("/:id", async (request, response) => {
   const tokenUser = request.user;
   if (tokenUser === null) {
@@ -103,9 +119,12 @@ blogsRouter.put("/like/:id", async (request, response) => {
 
   const blog = await Blog.findById(request.params.id);
   blog.likes += 1
-  const newBlog = await blog.save()
 
-  response.status(200).json(newBlog);
+  const responseBlog = await Blog.findByIdAndUpdate(blog.id, blog, {new: true}).populate("user", {
+    username: 1,
+    name: 1
+  });
+  response.status(200).json(responseBlog);
 });
 
 module.exports = blogsRouter;

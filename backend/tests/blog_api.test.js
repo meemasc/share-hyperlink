@@ -291,6 +291,27 @@ describe("blog api tests", () => {
       expect(result.likes).toBe(blogToUpdate.likes);
     });
   });
+
+  describe("commenting on a blog", () => {
+    test("commenting works", async () => {
+      const user = {
+        username: "root",
+        password: "sekret",
+      };
+      const loggedUser = await api.post("/api/login").send(user);
+      const blogToUpdate = helper.initialBlogs[0];
+      const comment = 'this is a comment' 
+      await api
+        .post(`/api/blogs/${blogToUpdate._id}/comment`)
+        .set("Authorization", `bearer ${loggedUser.body.token}`)
+        .expect(200)
+        .send({ comment });
+
+      const result = await Blog.findById(blogToUpdate._id);
+      expect(result.comments[0]).toBe(comment);
+    })
+  })
+
 });
 
 describe("user api tests", () => {

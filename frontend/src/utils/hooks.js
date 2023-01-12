@@ -1,6 +1,6 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { initializeBlogs, likeBlog, deleteBlog } from '../reducers/blogsReducer'
+import { initializeBlogs, likeBlog, deleteBlog, commentBlog } from '../reducers/blogsReducer'
 import { initializeUser, logoutUser } from '../reducers/userReducer'
 import { initializeAllUsers } from '../reducers/allUsersReducer'
 
@@ -16,24 +16,55 @@ export const useInitialize = () => {
 export const useEventHandler = () => {
   const dispatch = useDispatch()
 
-  const likeHandler = (blog) => () => {
+  const likeHandler = (blog) => (event) => {
+    event.preventDefault()
     dispatch(likeBlog(blog.id))
   }
 
-  const removeHandler = (blog) => () => {
+  const removeHandler = (blog) => (event) => {
+    event.preventDefault()
     const alert = window.confirm(`Remove blog ${blog.title} by ${blog.author}`)
     if (alert) {
       dispatch(deleteBlog(blog.id))
     }
   }
 
-  const logoutHandler = () => () => {
+  const logoutHandler = () => (event) => {
+    event.preventDefault()
     dispatch(logoutUser())
+  }
+
+  const commentHandler = (field, id) => (event) => {
+    event.preventDefault()
+    dispatch(commentBlog(field.input.value, id))
+    field.reset()
   }
 
   return {
     likeHandler,
     removeHandler,
-    logoutHandler
+    logoutHandler,
+    commentHandler
+  }
+}
+
+export const useField = (name) => {
+  const [value, setValue] = useState('')
+
+  const onChange = (event) => {
+    setValue(event.target.value)
+  }
+
+  const reset = () => {
+    setValue('')
+  }
+
+  return {
+    input: {
+      name,
+      value,
+      onChange,
+    },
+    reset
   }
 }
