@@ -10,6 +10,7 @@ const mongoose = require("mongoose");
 const middleware = require("./utils/middleware");
 require("express-async-errors");
 
+mongoose.set('strictQuery', true);
 logger.info("connecting to", config.MONGODB_URI);
 
 mongoose

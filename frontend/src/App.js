@@ -3,13 +3,15 @@ import { Routes, Route } from 'react-router-dom'
 import { useInitialize } from './utils/hooks'
 import { Container } from '@mui/material'
 
-import LoginForm from './components/LoginForm'
+import LoginView from './components/Views/LoginView'
+import SignUpView from './components/Views/SignUpView'
+import AccountView from './components/Views/AccountView'
 import Notification from './components/Notification'
-import LoggedUser from './components/LoggedUser'
-import UsersView from './components/UsersView'
-import UserView from './components/UserView'
-import BlogView from './components/BlogView'
-import NavigationMenu from './components/NavigationMenu'
+import MainView from './components/Views/MainView/MainView'
+import UsersView from './components/Views/UsersView'
+import UserView from './components/Views/UserView'
+import BlogView from './components/Views/BlogView/BlogView'
+import NavigationMenu from './components/NavigationMenu/NavigationMenu'
 
 const App = () => {
   useInitialize()
@@ -20,8 +22,10 @@ const App = () => {
         <NavigationMenu />
         <Notification />
         <Routes>
-          <Route path="/" element={<LoggedUser />} />
-          <Route path="/login" element={<LoginForm />} />
+          <Route path="/" element={<MainView />} />
+          <Route path="/login" element={<LoginView />} />
+          <Route path="/signup" element={<SignUpView />} />
+          <Route path="/account" element={<AccountView />} />
           <Route path="/users/:id" element={<UserView />} />
           <Route path="/users" element={<UsersView />} />
           <Route path="/blogs/:id" element={<BlogView />} />

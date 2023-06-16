@@ -1,7 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit'
 import blogService from '../services/blogs'
 import loginService from '../services/login'
+import userService from '../services/users'
 import { setNotification } from '../reducers/notificationReducer'
+import { addUser } from '../reducers/allUsersReducer'
 
 export const initializeUser = () => {
   return (dispatch) => {
@@ -26,6 +28,25 @@ export const loginUser = (username, password) => {
       dispatch(userReducer.actions.setUser(user))
     } catch {
       dispatch(setNotification('wrong username or password', 'red', 5))
+    }
+  }
+}
+
+export const signUpUser = (username, name, password) => {
+  return async (dispatch) => {
+    try{
+      const newUser = await userService.createUser({ username, name, password })
+      const loggedUser = await loginService.login({
+        username,
+        password,
+      })
+      window.localStorage.setItem('loggedBlogappUser', JSON.stringify(loggedUser))
+      blogService.setToken(loggedUser.token)
+      dispatch(userReducer.actions.setUser(loggedUser))
+      dispatch(addUser(newUser))
+    }
+    catch {
+      dispatch(setNotification('invalid username or password', 'red', 5))
     }
   }
 }
