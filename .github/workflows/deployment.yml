@@ -2,12 +2,12 @@ name: Fly Deploy
 
 on:
   pull_request:    
-    branches: [master]    
+    branches: [main]    
     types: [closed]
 
 jobs:
   deployment:
-    if: ${{ github.merged }}
+    if: ${{ github.merged == 'push' }}
     name: Deploy app
     runs-on: ubuntu-latest
     steps:
@@ -29,7 +29,7 @@ jobs:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
 
   tag_release:
-    if: ${{ github.merged }}
+    if: ${{ github.event_name == 'push' }}
     runs-on: ubuntu-latest
     permissions:
       contents: write
