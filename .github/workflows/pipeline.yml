@@ -13,9 +13,10 @@ jobs:
     - uses: actions/setup-node@v3
       with:
         node-version: '20'
-    - name: Install dependencies
-      run: cd backend && npm install
-    - name: Check style    
-      run: cd backend && npm run lint
+    - name: Check style for backend
+      run: cd backend && eslint .
+    - name: Check style for frontend
+      run: cd backend && eslint .
+      
 
   
