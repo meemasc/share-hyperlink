@@ -2,9 +2,5 @@
 /build
 /requests
 
-Dockerfile
-fly.toml
-.dockerignore
-
 .env
 .eslintrc.js
