@@ -1,0 +1,27 @@
+name: Deployment pipeline
+
+on:
+  push:
+    branches:
+      - feature
+
+jobs:
+  check_lint:
+    runs-on: ubuntu-20.04
+    steps:
+    - uses: actions/checkout@v3
+    - uses: actions/setup-node@v3
+      with:
+        node-version: '20'
+    - name: Install dependencies for backend
+      run: cd backend && npm install
+    - name: Check style for backend
+      run: cd backend && npm run lint
+
+    - name: Install dependencies for frontend
+      run: cd frontend && npm install
+    - name: Check style for frontend
+      run: cd frontend && npm run lint
+      
+
+  
