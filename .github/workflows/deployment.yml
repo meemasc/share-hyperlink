@@ -1,12 +1,13 @@
 name: Fly Deploy
 
 on:
-  pull_request:    
-    branches: [master]    
-    types: [synchronize]
-  
+  push:
+    branches:
+      - master
+
 jobs:
   deployment:
+    if: ${{ github.event_name == 'push' }}
     name: Deploy app
     runs-on: ubuntu-latest
     steps:
@@ -14,14 +15,21 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: '20'
+
+      - name: Install dependencies for backend
+        run: cd backend && npm install
+      - name: Install dependencies for frontend
+        run: cd frontend && npm install
       - name: Create Build
-        run: cd ../backend && npm run build:actions
+        run: cd backend && npm run build:ui
+
       - uses: superfly/flyctl-actions/setup-flyctl@master
-      - run: cd ./backend && flyctl deploy --remote-only
+      - run: cd backend && flyctl deploy --remote-only
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
 
   tag_release:
+    if: ${{ github.event_name == 'push' }}
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -33,5 +41,5 @@ jobs:
       - name: Bump version and push tag
         uses: anothrNick/github-tag-action@1.64.0
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.PAT }}
           DEFAULT_BUMP: patch
