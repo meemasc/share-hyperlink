@@ -1,7 +1,7 @@
 import React from 'react'
 import { Routes, Route } from 'react-router-dom'
 import { useInitialize } from './utils/hooks'
-import { Container } from '@mui/material'
+import { Container, Box } from '@mui/material'
 
 import LoginView from './components/Views/LoginView'
 import SignUpView from './components/Views/SignUpView'
@@ -12,12 +12,20 @@ import UsersView from './components/Views/UsersView'
 import UserView from './components/Views/UserView'
 import BlogView from './components/Views/BlogView/BlogView'
 import NavigationMenu from './components/NavigationMenu/NavigationMenu'
+import Footer from './components/Views/Footer'
 
 const App = () => {
   useInitialize()
 
+  const style = {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    height: '100vh',
+  }
+
   return (
-    <div>
+    <Box sx={style}>
       <Container>
         <NavigationMenu />
         <Notification />
@@ -29,9 +37,10 @@ const App = () => {
           <Route path="/users/:id" element={<UserView />} />
           <Route path="/users" element={<UsersView />} />
           <Route path="/blogs/:id" element={<BlogView />} />
-        </Routes>
-      </Container>
-    </div>
+        </Routes> 
+     </Container>
+     <Footer />
+    </Box>
   )
 }
 
