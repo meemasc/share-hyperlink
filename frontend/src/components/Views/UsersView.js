@@ -21,7 +21,7 @@ const UsersView = () => {
 
   return (
     <div>
-      <Typography sx={{ p: 1, bgcolor: 'secondary.main' }} align="center" variant="h3" color="inherit">
+      <Typography sx={{ p: 1, bgcolor: 'text.secondary' }} align="center" variant="h3" color="inherit">
         Users
       </Typography>
       <TableContainer sx={{ maxWidth: 'sm', m: 2 }} elevation={6} component={Paper}>
