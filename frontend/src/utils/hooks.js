@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { initializeBlogs, likeBlog, deleteBlog, commentBlog } from '../reducers/blogsReducer'
 import { initializeUser, logoutUser } from '../reducers/userReducer'
 import { initializeAllUsers } from '../reducers/allUsersReducer'
@@ -15,6 +15,7 @@ export const useInitialize = () => {
 
 export const useEventHandler = () => {
   const dispatch = useDispatch()
+  const user = useSelector(state => state.user)
 
   const likeHandler = (blog) => (event) => {
     event.preventDefault()
@@ -34,9 +35,9 @@ export const useEventHandler = () => {
     dispatch(logoutUser())
   }
 
-  const commentHandler = (field, id) => (event) => {
+  const commentHandler = (field, blogID) => (event) => {
     event.preventDefault()
-    dispatch(commentBlog(field.input.value, id))
+    dispatch(commentBlog(field.input.value, blogID, user.id))
     field.reset()
   }
 

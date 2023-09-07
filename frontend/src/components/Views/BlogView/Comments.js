@@ -25,17 +25,17 @@ const Comments = ({ comments }) => {
   return (
     <Paper variant="outlined" sx={{ padding: 2, maxWidth: 'sm' }}>
       <Typography align="center" variant="h4">
-        Yorumlar
+        Comments
       </Typography>
       <List>
-        {comments.map((comment, index) => (
-          <div key={index}>
+        {comments.map((commentObj) => (
+          <div key={commentObj._id}>
             <Divider />
             <ListItem>
               <ListItemIcon>
                 <CommentIcon />
               </ListItemIcon>
-              <ListItemText primary={comment} />
+              <ListItemText primary={commentObj.comment} />
             </ListItem>
           </div>
         ))}

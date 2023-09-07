@@ -18,18 +18,22 @@ const BlogView = () => {
       <Typography sx={{ p: 1 }} align="center" variant="h4" color="inherit">
         {blog.title}
       </Typography>
-      <MaterialUiLink underline="hover" component={Link} to={`/users/${blog.user.id}`}> 
-        <Typography variant="h6" color="inherit">
-          {`by ${blog.user.username}`}
-        </Typography>
-      </MaterialUiLink>
+      <Typography variant="h6" color="inherit">
+          Created By:  
+          <MaterialUiLink underline="hover" component={Link} to={`/users/${blog.user.id}`}> 
+           {blog.user.username}
+          </MaterialUiLink>
+      </Typography>
+      <Typography sx={{ p: 1 }} variant="h6" color="inherit" align="center">
+        {blog.description}
+      </Typography>
       <MaterialUiLink href={blog.url} underline="hover">
         <Typography sx={{ p: 1 }} variant="h6" color="inherit">
-          Blog Linki
+          Blog Link
         </Typography>
       </MaterialUiLink>
       <Typography sx={{ p: 1 }} variant="h6" color="inherit">
-        {blog.likes} likes
+        Number of Likes: {blog.likes.length}
       </Typography>
       <Comments comments={blog.comments}/>
     </Paper>

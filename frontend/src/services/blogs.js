@@ -24,7 +24,11 @@ const like = async (id) => {
   const config = {
     headers: { Authorization: token },
   }
-  const response = await axios.put(`${baseUrl}/like/${id}`, {}, config)
+  const response = await axios
+    .put(`${baseUrl}/like/${id}`, {}, config)
+    .catch((error) => {
+      return error.response
+    })
   return response.data
 }
 
@@ -39,7 +43,8 @@ const comment = async (id, comment) => {
   const config = {
     headers: { Authorization: token },
   }
-  await axios.post(`${baseUrl}/${id}/comment`, { comment }, config)
+  const response =  await axios.post(`${baseUrl}/${id}/comment`, { comment }, config)
+  return response.data
 }
 
 const object = { getAll, create, setToken, like, clean, comment }
