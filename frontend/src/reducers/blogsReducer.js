@@ -32,15 +32,19 @@ export const deleteBlog = (blogID) => {
 
 export const likeBlog = (blogID) => {
   return async (dispatch) => {
-    await blogService.like(blogID)
-    dispatch(blogsReducer.actions.likeAction(blogID))
+    const newBlog = await blogService.like(blogID)
+    if (newBlog.error) {
+      dispatch(setNotification(newBlog.error, 'red', 5))
+    } else {
+      dispatch(blogsReducer.actions.changeAction(newBlog))
+    }
   }
 }
 
 export const commentBlog = (comment, blogID) => {
   return async (dispatch) => {
-    await blogService.comment(blogID, comment)
-    dispatch(blogsReducer.actions.commentAction({ blogID, comment }))
+    const newBlog = await blogService.comment(blogID, comment)
+    dispatch(blogsReducer.actions.changeAction(newBlog))
   }
 }
 
@@ -57,30 +61,14 @@ const blogsReducer = createSlice({
     removeAction(state, action) {
       return state.filter((blog) => blog.id !== action.payload)
     },
-    likeAction(state, action) {
+    changeAction(state, action) {
       return state.map((blog) => {
-        if (blog.id === action.payload) {
-          const newLikes = blog.likes + 1
-          return {
-            ...blog,
-            likes: newLikes,
-          }
+        if (blog.id === action.payload.id) {
+          return action.payload
         }
         return blog
       })
     },
-    commentAction(state, action) {
-      return state.map((blog) => {
-        if (blog.id === action.payload.blogID) {
-          const newBlog ={
-            ...blog,
-            comments: blog.comments.concat(action.payload.comment)
-          }
-          return newBlog
-        }
-        return blog
-      })
-    }
   },
 })
 

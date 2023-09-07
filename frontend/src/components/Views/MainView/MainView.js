@@ -18,7 +18,7 @@ const MainView = () => {
       </Typography>
       <br />
       {user.username ?
-      <Togglable buttonLabel="create new blog" ref={blogFormRef}>
+      <Togglable buttonLabel="Create a New Blog" ref={blogFormRef}>
         <CreateNewBlog blogFormRef={blogFormRef} />
       </Togglable> :
       <div></div>

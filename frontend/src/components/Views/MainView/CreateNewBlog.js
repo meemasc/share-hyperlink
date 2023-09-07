@@ -1,10 +1,11 @@
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
+import { Stack, TextField, Button } from '@mui/material'
 import { addNewBlog } from '../../../reducers/blogsReducer'
 
 const CreateNewBlog = ({ blogFormRef }) => {
   const [blogTitle, setBlogTitle] = useState('')
-  const [blogAuthor, setBlogAuthor] = useState('')
+  const [blogDescription, setBlogDescription] = useState('')
   const [blogUrl, setBlogUrl] = useState('')
   const dispatch = useDispatch()
 
@@ -13,7 +14,7 @@ const CreateNewBlog = ({ blogFormRef }) => {
 
     const blog = {
       title: blogTitle,
-      author: blogAuthor,
+      description: blogDescription,
       url: blogUrl,
     }
 
@@ -22,50 +23,46 @@ const CreateNewBlog = ({ blogFormRef }) => {
     dispatch(addNewBlog(blog))
 
     setBlogTitle('')
-    setBlogAuthor('')
+    setBlogDescription('')
     setBlogUrl('')
 
   }
 
   return (
     <div>
-      <h2>create new</h2>
+      <h2>Create a New Blog</h2>
       <form onSubmit={handleBlogCreation}>
-        <div>
-          title:
-          <input
-            id="title"
+        <Stack
+        direction="column"
+        alignItems="center"
+        spacing={2}
+        >
+          <TextField
             type="text"
             value={blogTitle}
             name="Title"
+            label="Title"
             onChange={({ target }) => setBlogTitle(target.value)}
           />
-        </div>
-        <div>
-          author:
-          <input
-            id="author"
+          <TextField
             type="text"
-            value={blogAuthor}
-            name="Author"
-            onChange={({ target }) => setBlogAuthor(target.value)}
+            value={blogDescription}
+            name="Description"
+            label="Description"
+            onChange={({ target }) => setBlogDescription(target.value)}
           />
-        </div>
-        <div>
-          url:
-          <input
-            id="url"
+          <TextField
             type="text"
             value={blogUrl}
             name="Url"
+            label="Url"
             onChange={({ target }) => setBlogUrl(target.value)}
           />
-        </div>
-        <button id="create-button" type="submit">
-          create
-        </button>
+        <Button type="submit" size="large" variant="contained">Create</Button>
+        </Stack>
       </form>
     </div>
+    
   )
 }
 

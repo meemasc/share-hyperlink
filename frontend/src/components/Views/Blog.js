@@ -13,19 +13,19 @@ const Blog = ({ blog }) => {
   return (
     <Card elevation={4} sx={{ m: 1 }}>
       <CardActionArea component={Link} to={`/blogs/${blog.id}`}>
-        <CardHeader  title={blog.title} subheader={blog.user.username}/>
+        <CardHeader  title={blog.title} subheader={`By ${blog.user.username}`}/>
         <CardContent>
           <Typography>
-            Begeni: {blog.likes}
+            Number of Likes: {blog.likes.length}
           </Typography>
           <Typography>
-            Yorum: {blog.comments.length}
+            Number of Comments: {blog.comments.length}
           </Typography>
         </CardContent>
       </CardActionArea>
       <CardActions>
         {isCreatedByUser ? <Button onClick={eventHandler.removeHandler(blog)}>Sil</Button> : null}
-        <Button onClick={eventHandler.likeHandler(blog)}>Like</Button>
+        {user.username ? <Button onClick={eventHandler.likeHandler(blog)}>Like</Button> : null}
       </CardActions>
     </Card>
   )
